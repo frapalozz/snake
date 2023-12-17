@@ -1,6 +1,5 @@
-                 
+// CREAZIONE GRIGLIA
 let griglia = [];
-
 for(let i = 0; i < 625; i++) {
     griglia.push(null);
 
@@ -9,3 +8,6 @@ for(let i = 0; i < 625; i++) {
     quadrato.setAttribute("id", ""+i);
     document.getElementById('superficie').appendChild(quadrato);
 }
+
+// START GIOCO
+if()
