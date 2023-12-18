@@ -16,14 +16,14 @@ for(let riga = 0; riga < 25; riga++) {
 // GENERA CIBO
 let ciboInGioco = 0;
 let generaCibo = function() {
-    if(ciboInGioco < 1) {
-       let x = 0;
+    if(ciboInGioco === 0) {
+        let x = 0;
         let y = 0;
         do {
             x = Math.round(Math.random() * 24);
             y = Math.round(Math.random() * 24);
             
-        }while(griglia[x][y] == 1);
+        }while(griglia[x][y] === 1);
         griglia[x][y] = 2;
         posizioneCibo = [x, y];
         ciboInGioco++;
@@ -33,10 +33,13 @@ let generaCibo = function() {
 }
 
 // START GAME
+let punteggio = 0;
+let posizioneSnake = [];
 let posizioneCibo = [null, null];
-let posizione = [11, 12]
+let posizione = [11, 12];
+posizioneSnake.push([posizione[0], posizione[1]]);
 griglia[posizione[0]][posizione[1]] = 1;
-document.getElementById('11-12').style.backgroundColor = 'green';
+document.getElementById(posizione[0]+"-"+posizione[1]).style.backgroundColor = 'green';
 generaCibo();
 
 // CONTROLLI
@@ -49,57 +52,80 @@ window.addEventListener('keydown', (e)=> {
 });
 
 let mangia = function(x, y) {
-    ciboInGioco--;
-    if(posizioneCibo[0] = x && posizioneCibo[1] == y) {
-        // Do something...
+    console.log("non mangia")
+    if(posizioneCibo[0] == x && posizioneCibo[1] == y) {
+        ciboInGioco--;
         generaCibo();
         lunghezza++;
+        punteggio++;
+        console.log("Mangia");
     }
 }
 
 // CODA SNAKE
 let lunghezza = 1;
+let tempo = 1;
 let coda = function(x, y) {
     griglia[x][y] = 0;
     document.getElementById(x+"-"+y).style.backgroundColor = "black";
+    posizioneSnake.shift();
 }
 
-const worker = new Worker("./coda.js");
+// COLLISION CHECKER
+let collision = false;
+let collisionChecker = function(x,y) {
+    if(griglia[x][y] == 1) collision = true;
+}
+
 
 // MOVIMENTO
-setTimeout(function () {
-    if(direzione === 'Up') {
-        posizione[0] = posizione[0] - 1;
-        if(posizione[0] < 0) posizione[0] = 24;
-        document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-        griglia[posizione[0], posizione[1]] = 1;
-        mangia(posizione[0], posizione[1]);
-        setTimeout(coda(posizione[0], posizione[1]), 600*lunghezza);
-    }
-    if(direzione === 'Down') {
-        posizione[0] = posizione[0] + 1;
-        if(posizione[0] > 24) posizione[0] = 0;
-        document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-        griglia[posizione[0], posizione[1]] = 1;
-        mangia(posizione[0], posizione[1]);
-        setTimeout(coda(posizione[0], posizione[1]), 600*lunghezza);
-    }
-    if(direzione === "Left") {
-        posizione[1] = posizione[1] - 1;
-        if(posizione[1] < 0) posizione[1] = 24;
-        document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-        griglia[posizione[0], posizione[1]] = 1;
-        mangia(posizione[0], posizione[1]);
-        setTimeout(coda(posizione[0], posizione[1]), 600*lunghezza);
-    }
-    if(direzione === "Right") {
-        posizione[1] = posizione[1] + 1;
-        if(posizione[1] > 24) posizione[1] = 0;
-        document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-        griglia[posizione[0], posizione[1]] = 1;
-        mangia(posizione[0], posizione[1]);
-        setTimeout(coda(posizione[0], posizione[1]), 600*lunghezza);
-    }
+setInterval(function () {
+    if(collision === false) {
+        if(direzione === 'Up') {
+            posizione[0] = posizione[0] - 1;
+            if(posizione[0] < 0) posizione[0] = 24;
+            collisionChecker(posizione[0],posizione[1]);
+            posizioneSnake.push([posizione[0],posizione[1]]);
+            document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
+            griglia[posizione[0], posizione[1]] = 1;
+            mangia(posizione[0], posizione[1]);
+        }
+        if(direzione === 'Down') {
+            posizione[0] = posizione[0] + 1;
+            if(posizione[0] > 24) posizione[0] = 0;
+            collisionChecker(posizione[0],posizione[1]);
+            posizioneSnake.push([posizione[0],posizione[1]]);
+            document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
+            griglia[posizione[0], posizione[1]] = 1;
+            mangia(posizione[0], posizione[1]);
+            
+        }
+        if(direzione === "Left") {
+            posizione[1] = posizione[1] - 1;
+            if(posizione[1] < 0) posizione[1] = 24;
+            collisionChecker(posizione[0],posizione[1]);
+            posizioneSnake.push([posizione[0],posizione[1]]);
+            document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
+            griglia[posizione[0], posizione[1]] = 1;
+            mangia(posizione[0], posizione[1]);
+        }
+        if(direzione === "Right") {
+            posizione[1] = posizione[1] + 1;
+            if(posizione[1] > 24) posizione[1] = 0;
+            collisionChecker(posizione[0],posizione[1]);
+            posizioneSnake.push([posizione[0],posizione[1]]);
+            document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
+            griglia[posizione[0], posizione[1]] = 1;
+            mangia(posizione[0], posizione[1]);
+        }
 
-}, 600);
+        
+        if(tempo == lunghezza){
+            coda(posizioneSnake[0][0], posizioneSnake[0][1]);
+        }
+        else if(tempo < lunghezza) tempo++;
+    }
+    
+
+}, 500);
 
