@@ -16,7 +16,7 @@ for(let riga = 0; riga < 25; riga++) {
 // GENERA CIBO
 let ciboInGioco = 0;
 let generaCibo = function() {
-    if(ciboInGioco === 0) {
+    if(ciboInGioco == 0) {
         let x = 0;
         let y = 0;
         do {
@@ -33,13 +33,16 @@ let generaCibo = function() {
 }
 
 // START GAME
-let punteggio = 1;
+let punteggio = 0;
+let puntSchermo = document.querySelector('h1');
+puntSchermo.textContent = punteggio
 let posizioneSnake = [];
 let posizioneCibo = [null, null];
 let posizione = [11, 12];
 posizioneSnake.push([posizione[0], posizione[1]]);
 griglia[posizione[0]][posizione[1]] = 1;
 document.getElementById(posizione[0]+"-"+posizione[1]).style.backgroundColor = 'green';
+generaCibo();
 generaCibo();
 
 // CONTROLLI
@@ -56,7 +59,7 @@ let mangia = function(x, y) {
         ciboInGioco--;
         generaCibo();
         lunghezza++;
-        punteggio++;
+        punteggio += 100;
         console.log(punteggio);
     }
 }
@@ -97,7 +100,6 @@ setInterval(function () {
             document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
             griglia[posizione[0]][posizione[1]] = 1;
             mangia(posizione[0], posizione[1]);
-            
         }
         if(direzione === "Left") {
             posizione[1] = posizione[1] - 1;
@@ -124,7 +126,8 @@ setInterval(function () {
         }
         else if(tempo < lunghezza) tempo++;
     }
+    puntSchermo.textContent = punteggio
     
     
 
-}, 500);
+}, 400);
