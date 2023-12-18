@@ -33,7 +33,7 @@ let generaCibo = function() {
 }
 
 // START GAME
-let punteggio = 0;
+let punteggio = 1;
 let posizioneSnake = [];
 let posizioneCibo = [null, null];
 let posizione = [11, 12];
@@ -57,6 +57,7 @@ let mangia = function(x, y) {
         generaCibo();
         lunghezza++;
         punteggio++;
+        console.log(punteggio);
     }
 }
 
@@ -72,11 +73,7 @@ let coda = function(x, y) {
 // COLLISION CHECKER
 let collision = false;
 let collisionChecker = function(x,y) {
-    for(let i = 0; i < posizioneSnake.length; i++) {
-        if(x == posizioneSnake[i][0]) {
-            if(posizioneSnake[i][1] == y) collision = true;
-        }
-    }
+    if(griglia[x][y] == 1) collision = true;
 }
 
 
@@ -89,7 +86,7 @@ setInterval(function () {
             collisionChecker(posizione[0],posizione[1]);
             posizioneSnake.push([posizione[0],posizione[1]]);
             document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-            griglia[posizione[0], posizione[1]] = 1;
+            griglia[posizione[0]][posizione[1]] = 1;
             mangia(posizione[0], posizione[1]);
         }
         if(direzione === 'Down') {
@@ -98,7 +95,7 @@ setInterval(function () {
             collisionChecker(posizione[0],posizione[1]);
             posizioneSnake.push([posizione[0],posizione[1]]);
             document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-            griglia[posizione[0], posizione[1]] = 1;
+            griglia[posizione[0]][posizione[1]] = 1;
             mangia(posizione[0], posizione[1]);
             
         }
@@ -108,7 +105,7 @@ setInterval(function () {
             collisionChecker(posizione[0],posizione[1]);
             posizioneSnake.push([posizione[0],posizione[1]]);
             document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-            griglia[posizione[0], posizione[1]] = 1;
+            griglia[posizione[0]][posizione[1]] = 1;
             mangia(posizione[0], posizione[1]);
         }
         if(direzione === "Right") {
@@ -117,7 +114,7 @@ setInterval(function () {
             collisionChecker(posizione[0],posizione[1]);
             posizioneSnake.push([posizione[0],posizione[1]]);
             document.getElementById(posizione[0] + "-" + posizione[1]).style.backgroundColor = "green";
-            griglia[posizione[0], posizione[1]] = 1;
+            griglia[posizione[0]][posizione[1]] = 1;
             mangia(posizione[0], posizione[1]);
         }
 
