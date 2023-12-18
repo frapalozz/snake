@@ -52,13 +52,11 @@ window.addEventListener('keydown', (e)=> {
 });
 
 let mangia = function(x, y) {
-    console.log("non mangia")
     if(posizioneCibo[0] == x && posizioneCibo[1] == y) {
         ciboInGioco--;
         generaCibo();
         lunghezza++;
         punteggio++;
-        console.log("Mangia");
     }
 }
 
@@ -74,13 +72,17 @@ let coda = function(x, y) {
 // COLLISION CHECKER
 let collision = false;
 let collisionChecker = function(x,y) {
-    if(griglia[x][y] == 1) collision = true;
+    for(let i = 0; i < posizioneSnake.length; i++) {
+        if(x == posizioneSnake[i][0]) {
+            if(posizioneSnake[i][1] == y) collision = true;
+        }
+    }
 }
 
 
 // MOVIMENTO
 setInterval(function () {
-    if(collision === false) {
+    if(!collision) {
         if(direzione === 'Up') {
             posizione[0] = posizione[0] - 1;
             if(posizione[0] < 0) posizione[0] = 24;
@@ -126,6 +128,6 @@ setInterval(function () {
         else if(tempo < lunghezza) tempo++;
     }
     
+    
 
 }, 500);
-
