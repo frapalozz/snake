@@ -15,9 +15,3 @@ body {
     display: grid;
     grid-template-columns: repeat(25, 1fr);
 }
-
-.posizione {
-    background-color: black;
-    width: 16px;
-    height: 16px;
-}
