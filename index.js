@@ -130,4 +130,4 @@ setInterval(function () {
     
     
 
-}, 400);
+}, 200);
